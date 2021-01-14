@@ -7,7 +7,7 @@ from accesslink import AccessLink
 
 
 try:
-    input = raw_input
+    input = input
 except NameError:
     pass
 
@@ -39,6 +39,7 @@ class PolarAccessLinkExample(object):
                   "2) Check available data\n" +
                   "3) Revoke access token\n" +
                   "4) Exit\n" +
+                  "5) List Recharges\n" +
                   "-----------------------")
             self.get_menu_choice()
 
@@ -48,7 +49,8 @@ class PolarAccessLinkExample(object):
             "1": self.get_user_information,
             "2": self.check_available_data,
             "3": self.revoke_access_token,
-            "4": self.exit
+            "4": self.exit,
+            "5": self.get_recharge_info
         }.get(choice, self.get_menu_choice)()
 
     def get_user_information(self):
@@ -139,6 +141,11 @@ class PolarAccessLinkExample(object):
             pretty_print_json(physical_info)
 
         transaction.commit()
+
+    def get_recharge_info(self):
+        recharge_info = self.accesslink.nightly_recharge.list_nightly_recharges(user_id=self.config["user_id"],
+                                                          access_token=self.config["access_token"])
+        pretty_print_json(recharge_info)
 
 
 if __name__ == "__main__":
